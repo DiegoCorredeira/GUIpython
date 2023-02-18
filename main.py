@@ -1,4 +1,6 @@
 import PySimpleGUI as sg
+from random import randint
+import backend
 
 theme = sg.theme('BlueMono')
 
@@ -19,7 +21,6 @@ def primeiraTela():
         exit()
 
 
-filmes = []
 layout = [
     [sg.Text('Nome do filme:', size=(15, 1)), sg.Input(key='-NAME-'), ],
     [sg.Text('Nota para o filme:', size=(15, 1)), sg.Input(key='Nota para o filme')],
@@ -27,12 +28,24 @@ layout = [
      sg.CalendarButton("Calendário", close_when_date_chosen=True, target="Date", format='%d/%m/%Y',
                        size=(10, 1))],
     [sg.Text('Filmes Cadastrados')],
-    [sg.Listbox(filmes, size=(50, 10), key='-BOX-')],
+    [sg.Listbox('NAME', size=(50, 10), key='-BOX-')],
 
-    [sg.Submit('Enviar'), sg.Cancel('Sair'), sg.Button('Deletar')]
+    [sg.Button('Enviar'), sg.Button('Sair'), sg.Button('Deletar')]
 
 ]
 
 primeiraTela()
 janela = sg.Window('Cadastro', layout)
-button, values = janela.read()
+while True:
+    button, values = janela.read()
+
+    if button == 'Enviar':
+        ID = randint(1, 999)
+        NAME = values['-NAME-'].capitalize()
+    if button == 'Sair':
+        exit()
+
+    if NAME != '':
+        backend.write(ID, NAME)
+
+        janela.find_element('-NAME-').Update('')
