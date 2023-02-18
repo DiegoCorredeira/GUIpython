@@ -21,14 +21,13 @@ def primeiraTela():
         exit()
 
 
+ID = ''
+NAME = backend.read_task()
+
 layout = [
     [sg.Text('Nome do filme:', size=(15, 1)), sg.Input(key='-NAME-'), ],
-    [sg.Text('Nota para o filme:', size=(15, 1)), sg.Input(key='Nota para o filme')],
-    [sg.Text('Data em que foi assistido:', size=(15, 1)), sg.InputText(key='Date'),
-     sg.CalendarButton("Calendário", close_when_date_chosen=True, target="Date", format='%d/%m/%Y',
-                       size=(10, 1))],
     [sg.Text('Filmes Cadastrados')],
-    [sg.Listbox('NAME', size=(50, 10), key='-BOX-')],
+    [sg.Listbox(NAME, size=(50, 10), key='-BOX-')],
 
     [sg.Button('Enviar'), sg.Button('Sair'), sg.Button('Deletar')]
 
@@ -39,18 +38,26 @@ janela = sg.Window('Cadastro', layout)
 while True:
     button, values = janela.read()
 
+    if NAME != '':
+        backend.write(ID, NAME)
+    NAME = backend.read_task()
+
+
     if button == 'Enviar':
         ID = randint(1, 999)
         NAME = values['-NAME-'].capitalize()
-    if button == 'Sair':
-        exit()
 
-    if NAME != '':
-        backend.write(ID, NAME)
 
-        janela.find_element('-NAME-').Update('')
+
+    janela.find_element('-NAME-').Update('')
+    janela.find_element('-BOX-').Update(NAME)
 
     if button == 'Deletar':
         if NAME:
             x = values['-BOX-'][0]
             backend.delete(x)
+            NAME = backend.read_task()
+            janela.find_element('-BOX-').Update(NAME)
+
+    if button == 'Sair':
+        exit()
