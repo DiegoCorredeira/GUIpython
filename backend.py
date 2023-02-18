@@ -14,3 +14,8 @@ dbase.commit()
 def write(ID, NAME):
     cursor.execute(''' INSERT into filmes(ID, NAME) VALUES(?,?)''', (ID, NAME))
     dbase.commit()
+
+
+def delete(x):
+    cursor.execute('''SELECT NAME from filmes where NAME =?''', x)
+    dbase.commit()

@@ -49,3 +49,8 @@ while True:
         backend.write(ID, NAME)
 
         janela.find_element('-NAME-').Update('')
+
+    if button == 'Deletar':
+        if NAME:
+            x = values['-BOX-'][0]
+            backend.delete(x)
